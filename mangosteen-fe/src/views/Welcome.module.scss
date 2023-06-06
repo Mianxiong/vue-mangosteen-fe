@@ -1,0 +1,20 @@
+.wrapper {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    > header {
+        flex-shrink: 0;
+        background: pink;
+        &:hover {
+            background: blue;
+        }
+    }
+    > main {
+        flex-grow: 1;
+        background: lightblue;
+    }
+    > footer {
+        flex-shrink: 0;
+        background: lightgreen;
+    }
+}
