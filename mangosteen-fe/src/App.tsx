@@ -33,7 +33,7 @@ export const App = defineComponent({
         //     <footer>页脚</footer>
         // </>
         return ()=> (
-            <div>
+            <div class="page">
                 <RouterView/>
             </div>
         )
