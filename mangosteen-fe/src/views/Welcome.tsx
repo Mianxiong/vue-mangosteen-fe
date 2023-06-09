@@ -7,12 +7,11 @@ console.log(logo);
 
 export const Welcome = defineComponent({
     setup: (props, context) => {
-        const main = ref<HTMLElement|null>(null) // 用ref引用这个main
-        const {direction, swiping} = useSwipe(main)
-        watchEffect(()=>{
-            console.log(swiping.value, direction.value)
-        })
-        useSwipe(main)
+        const main = ref<HTMLElement>() // 用ref引用这个main
+        // const {direction, swiping} = useSwipe(main)
+        // watchEffect(()=>{
+        //     console.log(swiping.value, direction.value)
+        // })
         return () => (<div class={s.wrapper}>
             <header>
                 <svg>
