@@ -7,11 +7,19 @@
     }
 }
 
-.button_wrapper .pig {
-    width: 128px;
-    height: 128px;
+.pig_wrapper {
+    padding: 120px 0;
 
-    &_wrapper {
-        padding: 160px 0;
+    .pig {
+        width: 128px;
+        height: 128px;
     }
+}
+
+
+.navIcon {
+    width: 30px !important;
+    height: 30px !important;
+    position: relative;
+    top: 2px;
 }
