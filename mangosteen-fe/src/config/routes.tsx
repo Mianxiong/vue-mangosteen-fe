@@ -28,12 +28,12 @@ export const routes: RouteRecordRaw[] = [
             { path: '4', name: 'Welcome4', components: { main: Fourth, footer: FourthActions } }
         ]
     },
-    {path:'/start', component: StartPage},
+    { path: '/start', component: StartPage },
     {
         path: '/items', component: ItemPage,
         children: [
-            {path: '', component: ItemList},
-            {path: 'create', component: ItemCreate}
+            { path: '', component: ItemList },
+            { path: 'create', component: ItemCreate }
         ]
     }
 ]
