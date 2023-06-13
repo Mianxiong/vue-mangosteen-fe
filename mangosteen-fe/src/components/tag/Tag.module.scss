@@ -11,16 +11,16 @@
     margin-top: 8px;
 }
 
-.formLabel {
-
-}
+.formLabel {}
 
 .formItem {
     min-height: var(--input-min-height);
     max-width: 100%;
-    &.button{
+
+    &.button {
         width: 100%;
     }
+
     &.input {
         flex-grow: 1;
         border: 1px solid var(--input-border-color);
@@ -35,7 +35,7 @@
             border-color: var(--error-color);
         }
     }
-    
+
 
     &_name {}
 
