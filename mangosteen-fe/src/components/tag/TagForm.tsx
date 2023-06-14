@@ -1,7 +1,7 @@
 import { defineComponent, PropType, reactive, toRaw } from 'vue';
 import s from './Tag.module.scss';
 import { EmojiSelect } from '../../shared/EmojiSelect';
-import { Rules, validate, type } from '../../shared/validate';
+import { Rules, validate } from '../../shared/validate';
 import { Button } from '../../shared/Button';
 import { Form, FormItem } from '../../shared/Form';
 export const TagForm = defineComponent({
@@ -80,10 +80,10 @@ export const TagForm = defineComponent({
                 <FormItem label='标签名'
                     type="text"
                     v-model={formData.name}
-                    error={errors['name'] ? errors['name'][0] : '　'} />
+                    error={errors['name']?.[0]} />
                 <FormItem label={'符号 ' + formData.sign}
                     type="emojiSelect" v-model={formData.sign}
-                    error={errors['sign'] ? errors['sign'][0] : '　'} />
+                    error={errors['sign']?.[0]} />
                 <FormItem>
                     <p class={s.tips}>记账时长按标签即可进行编辑</p>
                 </FormItem>
