@@ -12,6 +12,7 @@ export const Tabs = defineComponent({
         //     type: Function as PropType<(name: string) => void>
         // }
     },
+    emits: ['update:selected'],
     setup: (props, context) => {
 
         return () => {
@@ -33,6 +34,7 @@ export const Tabs = defineComponent({
                         //     {item.props?.name}
                         // </li>
                         <li class={[item.props?.name === props.selected ? [s.selected, cp + '_selected'] : '',cp + '_tabs_nav_item']}
+                        // 触发事件 emit('update:selected')
                             onClick={() => context.emit('update:selected', item.props?.name)}>
                             {item.props?.name}
                         </li>

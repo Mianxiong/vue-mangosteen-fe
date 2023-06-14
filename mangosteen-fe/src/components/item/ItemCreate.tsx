@@ -68,6 +68,8 @@ export const ItemCreate = defineComponent({
             {/* <Tabs selected={refKind.value} onUpdateSelected={name => refKind.value = name}> */}
             {/* <Tabs selected={refKind.value} onUpdateSelected={onUpdateSelected}> */}
             <div class={s.wrapper}>
+              {/* 接受一个值，监听一个事件 */}
+              {/* 如果不用v-model，用事件怎么办？ */}
               <Tabs v-model:selected={refKind.value} class={s.tabs}>
                 <Tab name="支出" class={s.tags_wrapper}>
                   <div class={s.tag}>
