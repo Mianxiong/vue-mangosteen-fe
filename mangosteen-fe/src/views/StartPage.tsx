@@ -5,36 +5,37 @@ import { FloatButton } from '../shared/FloatButton';
 import { Center } from '../shared/Center';
 import { Icon } from '../shared/icon';
 import { Navbar } from '../shared/Navbar';
-import { Overlay } from '../shared/Overlay';
+import { Overlay, OverlayIcon } from '../shared/Overlay';
 import { RouterLink } from 'vue-router';
 import { MainLayout } from '../layouts/MainLayout';
 export const StartPage = defineComponent({
   setup: (props, context) => {
-    const refOverlayVisible = ref(false)
-    const onClick = () => {
-      console.log('hi')
-    }
-    const onClickMenu = () => {
-      refOverlayVisible.value = !refOverlayVisible.value
-    }
+    // const refOverlayVisible = ref(false)
+    // const onClick = () => {
+    //   console.log('hi')
+    // }
+    // const onClickMenu = () => {
+    //   refOverlayVisible.value = !refOverlayVisible.value
+    // }
     return () => (
         <MainLayout>{
           {
             title: () => '点滴记账',
-            icon: () => <Icon name="menu" class={s.navIcon} onClick={onClickMenu} />,
+            // icon: () => <Icon name="menu" class={s.navIcon} onClick={onClickMenu} />,
+            icon: () => <OverlayIcon />,
             default: () => <>
               <Center class={s.pig_wrapper}>
                 <Icon name="pig" class={s.pig} />
               </Center>
               <div class={s.button_wrapper}>
                 <RouterLink to="/items/create">
-                  <Button class={s.button} onClick={onClick}>开始记账</Button>
+                  <Button class={s.button}>开始记账</Button>
                 </RouterLink>
               </div>
               <RouterLink to="/items/create">
                 <FloatButton iconName='add' />
               </RouterLink>
-              {refOverlayVisible.value && <Overlay onClose={() => refOverlayVisible.value = !refOverlayVisible.value} />}
+              {/* {refOverlayVisible.value && <Overlay onClose={() => refOverlayVisible.value = !refOverlayVisible.value} />} */}
             </>
           }
         }</MainLayout>

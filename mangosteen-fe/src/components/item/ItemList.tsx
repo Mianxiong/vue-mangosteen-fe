@@ -8,6 +8,7 @@ import s from './ItemList.module.scss'
 import { ItemSummary } from './ItemSummary';
 import { Time } from '../../shared/time';
 import { Form, FormItem } from '../../shared/Form';
+import { OverlayIcon } from '../../shared/Overlay';
 
 export const ItemList = defineComponent({
   setup: (props, context) => {
@@ -42,7 +43,7 @@ export const ItemList = defineComponent({
       <MainLayout>{
         {
           title: () => '点滴记账',
-          icon : () => <Icon name="menu"/>,
+          icon: () => <OverlayIcon />,
           default: () => <>
             <Tabs classPrefix={'customTabs'} v-model:selected={refSelected.value}
               onUpdate:selected={ onSelect }>
