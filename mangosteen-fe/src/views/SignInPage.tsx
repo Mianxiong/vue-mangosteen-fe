@@ -1,4 +1,4 @@
-import { defineComponent, PropType, reactive } from 'vue';
+import { defineComponent, PropType, reactive, ref } from 'vue';
 import s from './SignInPage.module.scss';
 import { MainLayout } from '../layouts/MainLayout';
 import { Icon } from '../shared/icon';
@@ -21,6 +21,7 @@ export const SignInPage = defineComponent({
             email: [],
             code: []
         })
+        const refValidationCode = ref<any>()
         const onSubmit = (e: Event) => {
             e.preventDefault()
             Object.assign(errors, {
@@ -35,7 +36,14 @@ export const SignInPage = defineComponent({
         }
         const onClickSendValidationCode = async () => {
             const response = await axios.post('/api/v1/validation_codes', { email: formData.email})
+            .catch(()=>{
+                //失败
+                return
+            })
+            // 成功
             console.log('response', response);
+            refValidationCode.value.startCount()
+            
             
         }
         return () => (
@@ -52,7 +60,7 @@ export const SignInPage = defineComponent({
                             <Form onSubmit={onSubmit}>
                                 <FormItem label="邮箱地址" type="text" placeholder='请输入邮箱，然后点击发送验证码'
                                     v-model={formData.email} error={errors.email?.[0]} />
-                                <FormItem label="验证码" type="validationCode" onClick={onClickSendValidationCode}
+                                <FormItem ref={refValidationCode} label="验证码" type="validationCode" onClick={onClickSendValidationCode}
                                     v-model={formData.code} error={errors.code?.[0]} placeholder='请输入六位数字' countForm={60}/>
                                 <FormItem style={{ paddingTop: '64px' }}>
                                     <Button>登录</Button>
