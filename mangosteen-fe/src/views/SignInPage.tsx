@@ -74,7 +74,7 @@ export const SignInPage = defineComponent({
                     icon: () => <Icon name="left" />,
                     default: () => (
                         <div class={s.wrapper}>
-                            <div>{JSON.stringify(formData)}</div>
+                            {/* <div>{JSON.stringify(formData)}</div> */}
                             <div class={s.logo}>
                                 <Icon class={s.icon} name='mangosteen' />
                                 <h1 class={s.appName}>点滴记账</h1>
