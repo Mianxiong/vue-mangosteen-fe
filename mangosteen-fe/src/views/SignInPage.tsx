@@ -6,6 +6,7 @@ import { Form, FormItem } from '../shared/Form';
 import { Button } from '../shared/Button';
 import { validate } from '../shared/validate';
 import axios from 'axios';
+import { http } from '../shared/Http';
 export const SignInPage = defineComponent({
     props: {
         name: {
@@ -14,7 +15,7 @@ export const SignInPage = defineComponent({
     },
     setup: (props, context) => {
         const formData = reactive({
-            email: '',
+            email: '757134184@qq.com',
             code: ''
         })
         const errors = reactive({
@@ -34,17 +35,20 @@ export const SignInPage = defineComponent({
             ])
             Object.assign(errors, newErrors)
         }
+        const onError = (error: any) => {
+            if (error.response.status === 422) {
+                Object.assign(errors, error.response.data.errors)
+            }
+            throw error
+        }
         const onClickSendValidationCode = async () => {
-            const response = await axios.post('/api/v1/validation_codes', { email: formData.email})
-            .catch(()=>{
-                //失败
-                return
-            })
+            const response = await http.post('/validation_codes', { email: formData.email })
+                .catch(onError)
             // 成功
             console.log('response', response);
             refValidationCode.value.startCount()
-            
-            
+
+
         }
         return () => (
             <MainLayout>{
@@ -61,7 +65,7 @@ export const SignInPage = defineComponent({
                                 <FormItem label="邮箱地址" type="text" placeholder='请输入邮箱，然后点击发送验证码'
                                     v-model={formData.email} error={errors.email?.[0]} />
                                 <FormItem ref={refValidationCode} label="验证码" type="validationCode" onClick={onClickSendValidationCode}
-                                    v-model={formData.code} error={errors.code?.[0]} placeholder='请输入六位数字' countForm={60}/>
+                                    v-model={formData.code} error={errors.code?.[0]} placeholder='请输入六位数字' countForm={60} />
                                 <FormItem style={{ paddingTop: '64px' }}>
                                     <Button>登录</Button>
                                 </FormItem>
