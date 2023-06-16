@@ -7,6 +7,7 @@ import { Button } from '../shared/Button';
 import { validate } from '../shared/validate';
 import axios from 'axios';
 import { http } from '../shared/Http';
+import { useBool } from '../hooks/useBool';
 export const SignInPage = defineComponent({
     props: {
         name: {
@@ -23,6 +24,7 @@ export const SignInPage = defineComponent({
             code: []
         })
         const refValidationCode = ref<any>()
+        const {ref: refDisabled, toggle, on: disabled, off: enable} = useBool(false)
         const onSubmit = (e: Event) => {
             e.preventDefault()
             Object.assign(errors, {
@@ -42,8 +44,10 @@ export const SignInPage = defineComponent({
             throw error
         }
         const onClickSendValidationCode = async () => {
+            disabled()
             const response = await http.post('/validation_codes', { email: formData.email })
                 .catch(onError)
+                .finally(enable)
             // 成功
             console.log('response', response);
             refValidationCode.value.startCount()
@@ -65,7 +69,7 @@ export const SignInPage = defineComponent({
                                 <FormItem label="邮箱地址" type="text" placeholder='请输入邮箱，然后点击发送验证码'
                                     v-model={formData.email} error={errors.email?.[0]} />
                                 <FormItem ref={refValidationCode} label="验证码" type="validationCode" onClick={onClickSendValidationCode}
-                                    v-model={formData.code} error={errors.code?.[0]} placeholder='请输入六位数字' countForm={60} />
+                                    v-model={formData.code} error={errors.code?.[0]} placeholder='请输入六位数字' disabled={refDisabled.value} countForm={60} />
                                 <FormItem style={{ paddingTop: '64px' }}>
                                     <Button>登录</Button>
                                 </FormItem>
