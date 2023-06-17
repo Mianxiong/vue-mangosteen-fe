@@ -9,6 +9,7 @@ import { http } from '../shared/Http';
 import { useBool } from '../hooks/useBool';
 import { history } from '../shared/history';
 import { useRoute, useRouter } from 'vue-router';
+import { refreshMe } from '../shared/me';
 export const SignInPage = defineComponent({
     props: {
         name: {
@@ -49,6 +50,12 @@ export const SignInPage = defineComponent({
                 //2.
                 // router.push('/sign_in?return_to=' + encodeURIComponent(route.fullPath))
                 const returnTo = route.query.return_to?.toString()
+                // refreshMe().then(()=> {
+                //     router.push(returnTo || '/')
+                // }, () => {
+                //     window.alert('登录失败')
+                // })
+                refreshMe()
                 router.push(returnTo || '/')
             }
         }
