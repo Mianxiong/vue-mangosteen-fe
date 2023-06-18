@@ -62,7 +62,9 @@ export const ItemCreate = defineComponent({
     //   { id: 19, name: '滴滴', sign: '￥', category: 'income' },
     // ])
     const refKind = ref('支出')
-
+    const refTagId = ref<number>()
+    const refHappenAt = ref<string>(new Date().toISOString())
+    const refAmount = ref<number>(0)
     // const {tags: expensesTags, hasMore, fetchTags} = useTags((page)=>{
     //   return http.get<Resources<Tag>>('/tags', {
     //     kind: 'expenses',
@@ -71,13 +73,13 @@ export const ItemCreate = defineComponent({
     //   })
     // })
 
-    const { tags: incomeTags, hasMore:hasMore2, fetchTags: fetchTags2 } = useTags((page) => {
-      return http.get<Resources<Tag>>('/tags', {
-        kind: 'income',
-        page: page + 1,
-        _mock: 'tagIndex'
-      })
-    })
+    // const { tags: incomeTags, hasMore:hasMore2, fetchTags: fetchTags2 } = useTags((page) => {
+    //   return http.get<Resources<Tag>>('/tags', {
+    //     kind: 'income',
+    //     page: page + 1,
+    //     _mock: 'tagIndex'
+    //   })
+    // })
 
     // const response = await http.get<Resources<Tag>>('/tags', {
     //   kind: 'expenses',
@@ -150,9 +152,11 @@ export const ItemCreate = defineComponent({
             <div class={s.wrapper}>
               {/* 接受一个值，监听一个事件 */}
               {/* 如果不用v-model，用事件怎么办？ */}
+              {/* <div>{refHappenAt.value}</div> */}
               <Tabs v-model:selected={refKind.value} class={s.tabs}>
                 <Tab name="支出">
-                  <Tags kind="expenses" key="expenses"/>
+                  {refAmount.value}
+                  <Tags kind="expenses" key="expenses" v-model:selected={refTagId.value}/>
                   {/* <div class={s.tags_wrapper}>
                     <div class={s.tag}>
                       <div class={s.sign}>
@@ -179,7 +183,7 @@ export const ItemCreate = defineComponent({
                   </div> */}
                 </Tab>
                 <Tab name="收入">
-                  <Tags kind="income" key="income"/>
+                  <Tags kind="income" key="income" v-model:selected={refTagId.value}/>
                   {/* <div class={s.tags_wrapper}>
                     <div class={s.tag}>
                       <div class={s.sign}>
@@ -206,7 +210,7 @@ export const ItemCreate = defineComponent({
                 </Tab>
               </Tabs>
               <div class={s.inputPad_wrapper}>
-                <InputPad />
+                <InputPad v-model:happenAt={refHappenAt.value} v-model:amount={refAmount.value}/>
               </div>
             </div>         
           </>

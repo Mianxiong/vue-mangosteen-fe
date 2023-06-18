@@ -12,8 +12,17 @@
 */
 export class Time {
     date: Date;
-    constructor(date = new Date()) {
-        this.date = date;
+    // constructor(date = new Date()) {
+    //     this.date = date;
+    // }
+    constructor(date?: string | Date) { // 类型： string 或者 date，当然也可以不传
+        if(date === undefined) {
+            this.date = new Date();
+        } else if(typeof date === 'string') {
+            this.date = new Date(date);
+        } else {
+            this.date = date
+        }
     }
     format(pattern = 'YYYY-MM-DD') {
         //pattern
