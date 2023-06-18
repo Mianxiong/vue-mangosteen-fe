@@ -54,19 +54,27 @@ export const InputPad = defineComponent({
             { text: '.', onClick: () => { appendText('.') } },
             { text: '0', onClick: () => { appendText(0) } },
             { text: '清空', onClick: () => { refAmount.value = '0' } },
+<<<<<<< HEAD
             { 
                 text: '提交', 
                 onClick: () => { 
                 context.emit('update:amount', parseFloat(refAmount.value) * 100)  
                 props.onSubmit?.() } 
             }
+=======
+            { text: '提交', onClick: () => { context.emit('update:amount', refAmount.value) } }
+>>>>>>> ac22cd3cd8cc2048d19b349ff63c5f599f39587a
         ]
         const refDatePickerVisible = ref(false)
         const showDatePicker = () => refDatePickerVisible.value = true
         const hideDatePicker = () => refDatePickerVisible.value = false
         // const setDate = (date: Date) => { refDate.value = date; hideDatePicker() }
         const setDate = (date: Date) => {context.emit('update:happenAt', date.toISOString()); hideDatePicker()}
+<<<<<<< HEAD
         const refAmount = ref(props.amount ?(props.amount / 100).toString() : '0')
+=======
+        const refAmount = ref(props.amount || '0')
+>>>>>>> ac22cd3cd8cc2048d19b349ff63c5f599f39587a
         return () => <>
             <div class={s.dateAndAmount}>
                 <span class={s.date}>

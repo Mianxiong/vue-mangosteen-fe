@@ -64,7 +64,6 @@ export const ItemCreate = defineComponent({
     //   { id: 17, name: '彩票', sign: '￥', category: 'income' },
     //   { id: 19, name: '滴滴', sign: '￥', category: 'income' },
     // ])
-
     // const {tags: expensesTags, hasMore, fetchTags} = useTags((page)=>{
     //   return http.get<Resources<Tag>>('/tags', {
     //     kind: 'expenses',
