@@ -1,4 +1,4 @@
-import { defineComponent, onMounted, PropType, ref } from 'vue';
+import { defineComponent, onMounted, PropType, reactive, ref } from 'vue';
 import s from './ItemCreate.module.scss';
 import { MainLayout } from '../../layouts/MainLayout';
 import { Icon } from '../../shared/icon';
@@ -8,6 +8,9 @@ import { http } from '../../shared/Http';
 import { Button } from '../../shared/Button';
 import { useTags } from '../../shared/useTags';
 import { Tags } from './Tags';
+import { useRouter } from 'vue-router';
+import { Dialog } from 'vant';
+import { AxiosError } from 'axios';
 export const ItemCreate = defineComponent({
   props: {
     name: {
@@ -61,10 +64,7 @@ export const ItemCreate = defineComponent({
     //   { id: 17, name: '彩票', sign: '￥', category: 'income' },
     //   { id: 19, name: '滴滴', sign: '￥', category: 'income' },
     // ])
-    const refKind = ref('支出')
-    const refTagId = ref<number>()
-    const refHappenAt = ref<string>(new Date().toISOString())
-    const refAmount = ref<number>(0)
+
     // const {tags: expensesTags, hasMore, fetchTags} = useTags((page)=>{
     //   return http.get<Resources<Tag>>('/tags', {
     //     kind: 'expenses',
@@ -132,6 +132,18 @@ export const ItemCreate = defineComponent({
     //   refHasMore.value = (pager.page - 1) * pager.per_page + resources.length < pager.count
     //   refPage.value += 1
     // })
+
+    // const refKind = ref('支出')
+    // const refTagId = ref<number>()
+    // const refHappenAt = ref<string>(new Date().toISOString())
+    // const refAmount = ref<number>(0)
+    const formData = reactive({
+      kind: '支出',
+      tags_id: [],
+      amount: 0,
+      happen_at: new Date().toISOString()
+    })
+
     onMounted(async () => {
       const response = await http.get<{ resources: Tag[] }>('/tags', {
         kind: 'income',
@@ -141,6 +153,27 @@ export const ItemCreate = defineComponent({
     })
     const refIncomeTags = ref<Tag[]>([])
     // const onUpdateSelected = (name: string) => refKind.value = name
+    const router = useRouter()
+    const onError = (error: AxiosError<ResourceError>) => {
+      if (error.response?.status === 422) {
+        // alert(Object.values(error.response.data.errors))
+        Dialog.alert({
+          title: '出错',
+          message: Object.values(error.response.data.errors).join('\n')
+        }).then(() => {
+
+        })
+      }
+      throw error
+    }
+    const onSubmit = async() => {
+      await http.post<Resource<Item>>('/items', formData, {
+        params: { _mock: 'itemCreate'}
+      }).catch (onError)
+      // console.log('11',response.data);
+      router.push("/items")
+      
+    }
     return () => (
       <MainLayout class={s.layout}>{
         {
@@ -153,10 +186,11 @@ export const ItemCreate = defineComponent({
               {/* 接受一个值，监听一个事件 */}
               {/* 如果不用v-model，用事件怎么办？ */}
               {/* <div>{refHappenAt.value}</div> */}
-              <Tabs v-model:selected={refKind.value} class={s.tabs}>
+              <Tabs v-model:selected={formData.kind} class={s.tabs}>
                 <Tab name="支出">
-                  {refAmount.value}
-                  <Tags kind="expenses" key="expenses" v-model:selected={refTagId.value}/>
+                  <div>{JSON.stringify(formData)}</div>
+                  {formData.amount}
+                  <Tags kind="expenses" key="expenses" v-model:selected={formData.tags_id[0]}/>
                   {/* <div class={s.tags_wrapper}>
                     <div class={s.tag}>
                       <div class={s.sign}>
@@ -183,7 +217,7 @@ export const ItemCreate = defineComponent({
                   </div> */}
                 </Tab>
                 <Tab name="收入">
-                  <Tags kind="income" key="income" v-model:selected={refTagId.value}/>
+                  <Tags kind="income" key="income" v-model:selected={formData.tags_id[0]}/>
                   {/* <div class={s.tags_wrapper}>
                     <div class={s.tag}>
                       <div class={s.sign}>
@@ -210,7 +244,7 @@ export const ItemCreate = defineComponent({
                 </Tab>
               </Tabs>
               <div class={s.inputPad_wrapper}>
-                <InputPad v-model:happenAt={refHappenAt.value} v-model:amount={refAmount.value}/>
+                <InputPad v-model:happenAt={formData.happen_at} v-model:amount={formData.amount} onSubmit={onSubmit}/>
               </div>
             </div>         
           </>
