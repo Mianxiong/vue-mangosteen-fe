@@ -72,3 +72,15 @@ export const mockTagIndex: Mock = (config) => {
 
 
 }
+
+export const mockTagShow: Mock = config => {
+    const createTag = (n = 1, attrs?: any) =>
+        ({
+            id: createId(),
+            name: faker.lorem.word(),
+            sign: faker.internet.emoji(),
+            kind: 'expenses',
+            ...attrs
+        })
+    return [200, { resource: createTag() }]
+}
