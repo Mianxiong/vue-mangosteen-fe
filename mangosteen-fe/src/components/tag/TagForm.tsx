@@ -1,9 +1,12 @@
 import { defineComponent, PropType, reactive, toRaw } from 'vue';
 import s from './Tag.module.scss';
 import { EmojiSelect } from '../../shared/EmojiSelect';
-import { Rules, validate } from '../../shared/validate';
+import { hasError, Rules, validate } from '../../shared/validate';
 import { Button } from '../../shared/Button';
 import { Form, FormItem } from '../../shared/Form';
+import { useRoute, useRouter } from 'vue-router';
+import { http } from '../../shared/Http';
+import { onFormError } from '../../shared/onFormError';
 export const TagForm = defineComponent({
     props: {
         name: {
@@ -11,12 +14,19 @@ export const TagForm = defineComponent({
         }
     },
     setup: (props, context) => {
+        const route = useRoute()
+        // if(!route.query.kind) {
+        //     return ()=><div>参数错误</div>
+        // }
         const formData = reactive({
             name: '',
-            sign: ''
+            sign: '',
+            kind: route.query.kind!.toString()
         })
         const errors = reactive<{ [k in keyof typeof formData]?: string[] }>({})
-        const onSubmit = (e: Event) => {
+        const router = useRouter()
+        const onSubmit = async (e: Event) => {
+            e.preventDefault()
             console.log(toRaw(formData))
             // 会去做推测
             const rules: Rules<typeof formData> = [
@@ -25,13 +35,23 @@ export const TagForm = defineComponent({
                 { key: 'sign', type: 'required', message: '必填' }
             ]
             Object.assign(errors, {
-                name: undefined,
-                sign: undefined
+                name: [],
+                sign: []
             })
             // const errors = validate(formData, rules)
             // 将得到的错误一个一个覆盖给 errors
             Object.assign(errors, validate(formData, rules))
             console.log(errors);
+            if (!hasError(errors)) {
+                const response = await http.post('/tags', formData, {
+                    params: { _mock: 'tagCreate' }
+                }).catch((error) => {
+                    onFormError(error, (data) => {
+                        Object.assign(errors, data.errors)
+                    })
+                })
+                router.back()
+            }
 
             // 不会去做推测，会去对比
             // const errors = validate(formData, [
@@ -43,7 +63,6 @@ export const TagForm = defineComponent({
             //     name: ['错误1','错误2'],
             //     sign: ['错误3','错误4']
             // }
-            e.preventDefault()
         }
         return () => (
             // <form class={s.form} onSubmit={onSubmit}>
@@ -77,7 +96,7 @@ export const TagForm = defineComponent({
             //     </div>
             // </form>
             <Form onSubmit={onSubmit}>
-                <FormItem label='标签名'
+                <FormItem label='标签名（最多 4 个 字符）'
                     type="text"
                     v-model={formData.name}
                     error={errors['name']?.[0]} />
@@ -88,7 +107,7 @@ export const TagForm = defineComponent({
                     <p class={s.tips}>记账时长按标签即可进行编辑</p>
                 </FormItem>
                 <FormItem>
-                    <Button class={[s.button]}>确定</Button>
+                    <Button type="submit" class={[s.button]}>确定</Button>
                 </FormItem>
             </Form>
         )

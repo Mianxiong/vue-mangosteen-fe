@@ -188,7 +188,7 @@ export const ItemCreate = defineComponent({
               {/* <div>{refHappenAt.value}</div> */}
               <Tabs v-model:selected={formData.kind} class={s.tabs}>
                 <Tab name="支出">
-                  <div>{JSON.stringify(formData)}</div>
+                  {/* <div>{JSON.stringify(formData)}</div> */}
                   {formData.amount}
                   <Tags kind="expenses" key="expenses" v-model:selected={formData.tags_id[0]}/>
                   {/* <div class={s.tags_wrapper}>
