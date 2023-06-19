@@ -11,6 +11,7 @@ import { Tags } from './Tags';
 import { useRouter } from 'vue-router';
 import { Dialog } from 'vant';
 import { AxiosError } from 'axios';
+import { BackIcon } from '../../shared/BackIcon';
 export const ItemCreate = defineComponent({
   props: {
     name: {
@@ -177,7 +178,7 @@ export const ItemCreate = defineComponent({
       <MainLayout class={s.layout}>{
         {
           title: () => '记一笔',
-          icon: () => <Icon name="left" class={s.navIcon} />,
+          icon: () => <BackIcon/>,
           default: () => <>
             {/* <Tabs selected={refKind.value} onUpdateSelected={name => refKind.value = name}> */}
             {/* <Tabs selected={refKind.value} onUpdateSelected={onUpdateSelected}> */}

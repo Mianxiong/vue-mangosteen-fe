@@ -6,6 +6,7 @@ import { Button } from '../../shared/Button';
 import { EmojiSelect } from '../../shared/EmojiSelect';
 import { Rules, validate } from '../../shared/validate';
 import { TagForm } from './TagForm';
+import { BackIcon } from '../../shared/BackIcon';
 export const TagCreate = defineComponent({
     setup: (props, context) => {
         const formData = reactive({
@@ -29,7 +30,7 @@ export const TagCreate = defineComponent({
             // 将得到的错误一个一个覆盖给 errors
             Object.assign(errors, validate(formData, rules))
             console.log(errors);
-            
+
             // 不会去做推测，会去对比
             // const errors = validate(formData, [
             //     { key: 'name', type: 'required', message: '必填' },
@@ -45,7 +46,7 @@ export const TagCreate = defineComponent({
         return () => (
             <MainLayout>{{
                 title: () => '新建标签',
-                icon: () => <Icon name="left" onClick={() => { }} />,
+                icon: () => <BackIcon />,
                 default: () => (
                     <TagForm />
                 )

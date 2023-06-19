@@ -6,6 +6,7 @@ import s from './Tag.module.scss';
 import { Icon } from '../../shared/icon';
 import { Button } from '../../shared/Button';
 import { TagForm } from './TagForm';
+import { BackIcon } from '../../shared/BackIcon';
 export const TagEdit = defineComponent({
   setup: (props, context) => {
     const formData = reactive({
@@ -45,7 +46,7 @@ export const TagEdit = defineComponent({
     return () => (
       <MainLayout>{{
         title: () => '新建标签',
-        icon: () => <Icon name="left" onClick={() => { }} />,
+        icon: () => <BackIcon />,
         default: () => <>
           <TagForm />
           <div class={s.actions}>
