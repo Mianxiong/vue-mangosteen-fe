@@ -80,12 +80,15 @@ export const LineChart = defineComponent({
         //     ['2018-01-30T00:00:00.000+0800', 1500],
         //     ['2018-01-31T00:00:00.000+0800', 1600],
         // ]
-        const refChart = ref<echarts.ECharts>()
+
+        // const refChart = ref<echarts.ECharts>()
+        let chart: echarts.ECharts | undefined = undefined
+
         onMounted(() => {
             if (refDiv.value === undefined) { return }
             // 基于准备好的dom，初始化echarts实例
             // var myChart = echarts.init(refDiv.value);
-            refChart.value = echarts.init(refDiv.value)
+            chart = echarts.init(refDiv.value)
 
             // const option = {
             //     grid: [
@@ -107,7 +110,7 @@ export const LineChart = defineComponent({
             // };
             // 绘制图表
             // myChart.setOption(option);
-            refChart.value.setOption({
+            chart.setOption({
                 ...echartsOption,
                 series: [{
                     data: props.data,
@@ -116,7 +119,7 @@ export const LineChart = defineComponent({
             })
         })
         watch(()=>props.data, ()=> {
-            refChart.value?.setOption({
+            chart?.setOption({
                 series:[
                     {
                         data: props.data
