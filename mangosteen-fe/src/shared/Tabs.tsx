@@ -7,6 +7,10 @@ export const Tabs = defineComponent({
         },
         classPrefix: {
             type: String
+        },
+        rerenderOnSelect: {
+            type: Boolean as PropType<boolean>,
+            default: false
         }
         // onUpdateSelected: {
         //     type: Function as PropType<(name: string) => void>
@@ -33,8 +37,8 @@ export const Tabs = defineComponent({
                         // >
                         //     {item.props?.name}
                         // </li>
-                        <li class={[item.props?.name === props.selected ? [s.selected, cp + '_selected'] : '',cp + '_tabs_nav_item']}
-                        // 触发事件 emit('update:selected')
+                        <li class={[item.props?.name === props.selected ? [s.selected, cp + '_selected'] : '', cp + '_tabs_nav_item']}
+                            // 触发事件 emit('update:selected')
                             onClick={() => context.emit('update:selected', item.props?.name)}>
                             {item.props?.name}
                         </li>
@@ -43,10 +47,16 @@ export const Tabs = defineComponent({
                 {/* <div key={props.selected}>
                     {tabs.find(item => item.props?.name === props.selected)}
                 </div> */}
-                <div>
-                    {/* {tabs.map(item => <div style={{display: item.props?.name === props.selected ? 'block' : 'none'}}>{item}</div>)} */}
-                    {tabs.map(item => <div v-show={item.props?.name === props.selected}>{item}</div>)}
-                </div>
+                {props.rerenderOnSelect ?
+                    <div key={props.selected}>
+                        {tabs.find(item => item.props?.name === props.selected)}
+                    </div> :
+                    <div>
+                        {/* {tabs.map(item => <div style={{display: item.props?.name === props.selected ? 'block' : 'none'}}>{item}</div>)} */}
+                        {tabs.map(item => <div v-show={item.props?.name === props.selected}>{item}</div>)}
+                    </div>
+                }
+
             </div>
         }
     }
