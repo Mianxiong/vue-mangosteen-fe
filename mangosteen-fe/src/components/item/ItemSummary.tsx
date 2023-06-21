@@ -5,6 +5,9 @@ import { http } from '../../shared/Http';
 import { Button } from '../../shared/Button';
 import { Money } from '../../shared/Money';
 import { Datetime } from '../../shared/DateTime';
+import { Center } from '../../shared/Center';
+import { Icon } from '../../shared/icon';
+import { RouterLink } from 'vue-router';
 export const ItemSummary = defineComponent({
   props: {
     startDate: {
@@ -65,7 +68,7 @@ export const ItemSummary = defineComponent({
     })
     return () => (
       <div class={s.wrapper}>
-        {items.value ? (
+        {(items.value && items.value.length > 0) ? (
           <>
             <ul class={s.total}>
               <li>
@@ -107,7 +110,16 @@ export const ItemSummary = defineComponent({
             </div>
           </>
         ) : (
-          <div>记录为空</div>
+          <>
+              <Center class={s.pig_wrapper}>
+                <Icon name="pig" class={s.pig} />
+              </Center>
+              <div class={s.button_wrapper}>
+                <RouterLink to="/items/create">
+                  <Button class={s.button}>开始记账</Button>
+                </RouterLink>
+              </div>
+          </>
         )}
         <FloatButton iconName="add" />
 
@@ -204,6 +216,9 @@ export const ItemSummary = defineComponent({
         </ol>
         <div class={s.more}>向下滑动加载更多</div>
         <FloatButton iconName='add' /> */}
+        <RouterLink to="/items/create">
+          <FloatButton iconName='add' />
+        </RouterLink>
       </div>
     )
   }

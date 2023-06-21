@@ -10,7 +10,7 @@ export const FourthActions: FunctionalComponent = () => {
         {/* <RouterLink class={s.fake} to="/start">跳过</RouterLink> */}
         <SkipFeatures class={s.fake} />
         <span onClick={onClick}>
-            <RouterLink to="/start">完成</RouterLink>
+            <RouterLink to="/items">完成</RouterLink>
         </span>
         
         {/* <RouterLink class={s.fake} to="/start">跳过</RouterLink> */}
