@@ -43,10 +43,10 @@ export const TagForm = defineComponent({
             console.log(errors);
             if (!hasError(errors)) {
                 const promise = await formData.id ? http.post(`/tags/${formData.id}`, formData, {
-                    params: { _mock: 'tagEdit' }
+                    _mock: 'tagEdit'
                 }) :
                     http.post(`/tags`, formData, {
-                        params: { _mock: 'tagCreate' }
+                        _mock: 'tagCreate'
                     })
                 await promise.catch((error) =>
                     onFormError(error, (data) => Object.assign(errors, data.errors))
@@ -87,7 +87,7 @@ export const TagForm = defineComponent({
         }
         onMounted(async () => {
             if (!props.id) { return }
-            const response = await http.get<Resource<Tag>>(`/tags/${props.id}`, { _mock: 'tagShow' })
+            const response = await http.get<Resource<Tag>>(`/tags/${props.id}`,{}, { _mock: 'tagShow' })
             console.log(response);
             Object.assign(formData, response.data.resource)
         })
