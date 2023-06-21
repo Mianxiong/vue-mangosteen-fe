@@ -46,7 +46,7 @@ export const SignInPage = defineComponent({
                 // const response = await http.post<{ jwt: string }>('/session', formData, {
                 //     params: { _mock: 'session' }
                 // }).catch(onError)
-                const response = await http.post<{ jwt: string }>('/session', formData)
+                const response = await http.post<{ jwt: string }>('/session', formData, {_autoLoading: true})
                     .catch(onError)
                 console.log(response)
                 localStorage.setItem('jwt', response.data.jwt)
