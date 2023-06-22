@@ -12,6 +12,7 @@ import { useRouter } from 'vue-router';
 import { Dialog } from 'vant';
 import { AxiosError } from 'axios';
 import { BackIcon } from '../../shared/BackIcon';
+import { hasError, validate } from '../../shared/validate';
 export const ItemCreate = defineComponent({
   props: {
     name: {
@@ -137,21 +138,29 @@ export const ItemCreate = defineComponent({
     // const refTagId = ref<number>()
     // const refHappenAt = ref<string>(new Date().toISOString())
     // const refAmount = ref<number>(0)
-    const formData = reactive({
-      kind: '支出',
-      tags_id: [],
+
+    // const formData = reactive({
+    //   kind: '支出',
+    //   tags_id: [],
+    //   amount: 0,
+    //   happen_at: new Date().toISOString()
+    // })
+    const formData = reactive<Partial<Item>>({
+      kind: 'expenses',
+      tag_ids: [],
       amount: 0,
       happen_at: new Date().toISOString()
     })
+    const errors = reactive<FormErrors<typeof formData>>({kind: [], tag_ids: [], amount: [], happen_at: []})
 
-    onMounted(async () => {
-      const response = await http.get<{ resources: Tag[] }>('/tags', {
-        kind: 'income',
-        _mock: 'tagIndex'
-      })
-      refIncomeTags.value = response.data.resources
-    })
-    const refIncomeTags = ref<Tag[]>([])
+    // onMounted(async () => {
+    //   const response = await http.get<{ resources: Tag[] }>('/tags', {
+    //     kind: 'income',
+    //     _mock: 'tagIndex'
+    //   })
+    //   refIncomeTags.value = response.data.resources
+    // })
+    // const refIncomeTags = ref<Tag[]>([])
     // const onUpdateSelected = (name: string) => refKind.value = name
     const router = useRouter()
     const onError = (error: AxiosError<ResourceError>) => {
@@ -167,6 +176,21 @@ export const ItemCreate = defineComponent({
       throw error
     }
     const onSubmit = async() => {
+      Object.assign(errors, {kind: [], tag_ids: [], amount: [], happen_at: []})
+      Object.assign(errors, validate(formData, [
+        { key: 'kind', type: 'required', message: '类型必填'},
+        { key: 'tag_ids', type: 'required', message: '标签必填'},
+        { key: 'amount', type: 'required', message: '金额必填'},
+        { key: 'amount', type: 'notEqual', value: 0, message: '金额不能为零'},
+        { key: 'happen_at', type: 'required',message: '时间必填'}
+      ]))
+      if(hasError(errors)) {
+        Dialog.alert({
+          title: '出错',
+          message: Object.values(errors).filter(i=>i.length>0).join('\n')
+        })
+        return
+      }
       // await http.post<Resource<Item>>('/items', formData, {
       //   params: { _mock: 'itemCreate'}
       await http.post<Resource<Item>>('/items', formData, {
@@ -189,10 +213,10 @@ export const ItemCreate = defineComponent({
               {/* 如果不用v-model，用事件怎么办？ */}
               {/* <div>{refHappenAt.value}</div> */}
               <Tabs v-model:selected={formData.kind} class={s.tabs}>
-                <Tab name="支出">
+                <Tab name="支出" value="expenses">
                   {/* <div>{JSON.stringify(formData)}</div> */}
                   {/* {formData.amount} */}
-                  <Tags kind="expenses" key="expenses" v-model:selected={formData.tags_id[0]}/>
+                  <Tags kind="expenses" key="expenses" v-model:selected={formData.tag_ids![0]}/>
                   {/* <div class={s.tags_wrapper}>
                     <div class={s.tag}>
                       <div class={s.sign}>
@@ -218,8 +242,8 @@ export const ItemCreate = defineComponent({
                     {hasMore.value ? <Button class={s.loadMore} onClick={fetchTags}>加载更多</Button> : <span class={s.noMore}>没有更多</span>}                   
                   </div> */}
                 </Tab>
-                <Tab name="收入">
-                  <Tags kind="income" key="income" v-model:selected={formData.tags_id[0]}/>
+                <Tab name="收入" value="income">
+                  <Tags kind="income" key="income" v-model:selected={formData.tag_ids![0]}/>
                   {/* <div class={s.tags_wrapper}>
                     <div class={s.tag}>
                       <div class={s.sign}>

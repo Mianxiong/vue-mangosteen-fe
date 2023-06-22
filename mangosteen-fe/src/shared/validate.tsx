@@ -1,5 +1,6 @@
 interface FData {
-    [k: string]: string | number | null | undefined | FData
+    // [k: string]: string | number | null | undefined | FData
+    [k: string]: JSONValue
 }
 // Rule拿到这个T，放到key上面
 type Rule<T> = {
@@ -8,11 +9,12 @@ type Rule<T> = {
     message: string
 } & (
         { type: 'required' } |
-        { type: 'pattern', regex: RegExp }
+        { type: 'pattern', regex: RegExp } |
+        { type: 'notEqual', value: JSONValue }
     )
 // Rules接受这个T
 type Rules<T> = Rule<T>[]
-export type { Rule, Rules, FData}
+export type { Rule, Rules, FData }
 // const r: Rule = {
 //     key: 'name', message: 'hi', type: 'pattern', regex: /hi/
 // }
@@ -41,6 +43,12 @@ export const validate = <T extends FData>(formData: T, rules: Rules<T>) => {
                     errors[key]?.push(message)
                 }
                 break;
+            case 'notEqual':
+                if (!isEmpty(value) && value === rule.value) {
+                    errors[key] = errors[key] ?? []
+                    errors[key]?.push(message)
+                }
+                break;
             default:
                 return;
         }
@@ -55,7 +63,7 @@ function isEmpty(value: null | undefined | string | number | FData) {
 export function hasError(errors: Record<string, string[]>) {
     // return Object.values(errors).reduce((result, value) => result + value.length, 0) > 0
     let result = false
-    for(let key in errors) {
+    for (let key in errors) {
         if (errors[key]?.length > 0) {
             result = true
             break

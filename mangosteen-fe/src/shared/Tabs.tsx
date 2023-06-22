@@ -37,9 +37,9 @@ export const Tabs = defineComponent({
                         // >
                         //     {item.props?.name}
                         // </li>
-                        <li class={[item.props?.name === props.selected ? [s.selected, cp + '_selected'] : '', cp + '_tabs_nav_item']}
+                        <li class={[item.props?.value === props.selected ? [s.selected, cp + '_selected'] : '', cp + '_tabs_nav_item']}
                             // 触发事件 emit('update:selected')
-                            onClick={() => context.emit('update:selected', item.props?.name)}>
+                            onClick={() => context.emit('update:selected', item.props?.value)}>
                             {item.props?.name}
                         </li>
                     )}
@@ -49,11 +49,11 @@ export const Tabs = defineComponent({
                 </div> */}
                 {props.rerenderOnSelect ?
                     <div key={props.selected}>
-                        {tabs.find(item => item.props?.name === props.selected)}
+                        {tabs.find(item => item.props?.value === props.selected)}
                     </div> :
                     <div>
                         {/* {tabs.map(item => <div style={{display: item.props?.name === props.selected ? 'block' : 'none'}}>{item}</div>)} */}
-                        {tabs.map(item => <div v-show={item.props?.name === props.selected}>{item}</div>)}
+                        {tabs.map(item => <div v-show={item.props?.value === props.selected}>{item}</div>)}
                     </div>
                 }
 
@@ -65,7 +65,12 @@ export const Tabs = defineComponent({
 export const Tab = defineComponent({
     props: {
         name: {
-            type: String as PropType<string>
+            type: String as PropType<string>,
+            required: true
+        },
+        value: {
+            type: String as PropType<string>,
+            required: true
         }
     },
     setup: (props, context) => {

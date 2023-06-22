@@ -81,14 +81,14 @@ export const TimeTabsLayout = defineComponent({
             {props.hideThisYear ? (
               <Tabs classPrefix='customTabs' v-model:selected={refSelected.value}
               onUpdate:selected={ onSelect } rerenderOnSelect={props.rerenderOnSwitchTab}>
-              <Tab name="本月">
+              <Tab name="本月" value="本月">
                 <props.component startDate={timeList[0].start.format()} endDate={timeList[0].end.format()}/>
               </Tab>
-              <Tab name="上月">
+              <Tab name="上月" value="上月">
                 {/* <ItemSummary /> */}
                 <props.component startDate={timeList[1].start.format()} endDate={timeList[1].end.format()} />
               </Tab>
-              <Tab name="自定义时间">
+              <Tab name="自定义时间" value="自定义时间">
                 {/* <ItemSummary /> */}
                 <props.component startDate={customTime.start} endDate={customTime.end} />
               </Tab>
@@ -96,18 +96,18 @@ export const TimeTabsLayout = defineComponent({
             ) : (
               <Tabs classPrefix='customTabs' v-model:selected={refSelected.value}
               onUpdate:selected={ onSelect } rerenderOnSelect={props.rerenderOnSwitchTab}>
-              <Tab name="本月">
+              <Tab name="本月" value="本月">
                 <props.component startDate={timeList[0].start.format()} endDate={timeList[0].end.format()}/>
               </Tab>
-              <Tab name="上月">
+              <Tab name="上月" value="上月">
                 {/* <ItemSummary /> */}
                 <props.component startDate={timeList[1].start.format()} endDate={timeList[1].end.format()} />
               </Tab>
-              <Tab name="今年">
+              <Tab name="今年" value="今年">
                 {/* <ItemSummary /> */}
                 <props.component startDate={timeList[2].start.format()} endDate={timeList[2].end.format()} />
               </Tab>
-              <Tab name="自定义时间">
+              <Tab name="自定义时间" value="自定义时间">
                 {/* <ItemSummary /> */}
                 <props.component startDate={customTime.start} endDate={customTime.end} />
               </Tab>
