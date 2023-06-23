@@ -58,7 +58,7 @@ router.beforeEach(async (to, from) => {
         // const path = await mePromise!.then(
         const path = await mePromise!.value!.then(
             () => true, // 成功
-            () => '/sign_in?return_to=' + to.path //失败
+            () => '/sign_in?return_to=' + from.path //失败
         )
         return path
     }
