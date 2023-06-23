@@ -4,9 +4,7 @@ import { createRouter } from 'vue-router';
 import { routes } from './config/routes';
 import { history } from './shared/history';
 import '@svgstore';
-import { http } from './shared/Http';
-import { fetchMe, mePromise } from './shared/me';
-import { createPinia } from 'pinia';
+import { createPinia, storeToRefs } from 'pinia';
 import { useMeStore } from './stores/useMeStore';
 
 const router = createRouter({
@@ -21,6 +19,7 @@ app.use(pinia)
 app.mount('#app')
 
 const meStore = useMeStore()
+const {mePromise} = storeToRefs(meStore)
 meStore.fetchMe()
 // const promise = http.get('/me')
 // fetchMe()
@@ -57,7 +56,7 @@ router.beforeEach(async (to, from) => {
         // })
         // return true
         // const path = await mePromise!.then(
-        const path = await meStore.mePromise!.then(
+        const path = await mePromise!.value!.then(
             () => true, // 成功
             () => '/sign_in?return_to=' + to.path //失败
         )
