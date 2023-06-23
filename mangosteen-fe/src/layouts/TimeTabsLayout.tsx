@@ -9,6 +9,7 @@ import { OverlayIcon } from '../shared/Overlay';
 import { Time } from '../shared/time';
 import { MainLayout } from './MainLayout';
 import { Tab, Tabs } from '../shared/Tabs';
+import { useItemStore } from '../stores/useItemStore';
 
 const demo = defineComponent({
     props: {
@@ -52,6 +53,7 @@ export const TimeTabsLayout = defineComponent({
       end: new Time().format()
     })
     const customTime = reactive<{start?:string,end?:string}>({})
+    // Object.assign(customTime, tempTime)
     const timeList = [
       {start: time.firstDayOfMonth(), end: time.lastDayOfMonth()},
       {start: time.add(-1,'month').firstDayOfMonth(), end: time.add(-1,'month').lastDayOfMonth()},
@@ -70,6 +72,16 @@ export const TimeTabsLayout = defineComponent({
       e.preventDefault()
       refOverlayVisible.value = false
       Object.assign(customTime, tempTime)
+      // if (customTime.start === tempTime.start && customTime.start === tempTime.end) {
+      //   const itemStore = useItemStore(['items', customTime.start, customTime.end])()
+      //   itemStore.$reset()
+      //   itemStore.fetchItems(customTime.start, customTime.end)
+      // } else {
+      // Object.assign(customTime, tempTime)
+      // }
+      // console.log('1',customTime);
+      // tempTime.end = new Time(customTime.end + 'T00:00:00.000+0800').add(1,'day').format()
+      // console.log('2',customTime);
     }
     const onSelect = (value: string) => { if (value === '自定义时间') { refOverlayVisible.value = true } }
     return () => (

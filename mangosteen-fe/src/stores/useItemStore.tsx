@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { http } from "../shared/Http";
+import { Time } from "../shared/time";
 
 type State = {
     items: Item[]
@@ -13,7 +14,7 @@ type Actions = {
     fetchNextPage: (startPage?: string, endDate?: string) => void
 }
 
-export const useItemStore = (id: string | string[]) =>
+export const useItemStore = (id: string | (string | undefined)[]) =>
     defineStore<string, State, {}, Actions>(typeof id === 'string' ? id : id.join('-'), {
         state: () => ({
             items: [],
@@ -30,6 +31,7 @@ export const useItemStore = (id: string | string[]) =>
                 if (!startDate || !endDate) {
                     return
                 }
+                endDate = new Time(endDate + 'T00:00:00.000+0800').add(1, 'day').format()
                 const response = await http.get<Resources<Item>>('/items', {
                     happen_after: startDate,
                     happen_before: endDate,

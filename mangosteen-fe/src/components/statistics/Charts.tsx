@@ -53,7 +53,7 @@ export const Charts = defineComponent({
             return Array.from({ length: n }).map((_, i) => {
                 const time = new Time(props.startDate + 'T00:00:00.000+0800').add(i, 'day').getTimestamp()
                 const item = data1.value[0]
-                const amount = (item && new Date(item.happen_at).getTime() === time)
+                const amount = (item && new Date(item.happen_at + 'T00:00:00.000+0800').getTime() === time)
                     ? data1.value.shift()!.amount
                     : 0
                 return [new Date(time).toISOString(), amount]
@@ -61,9 +61,10 @@ export const Charts = defineComponent({
         })
 
         const fetchData1 = async () => {
+            const endDate = new Time(props.endDate + 'T00:00:00.000+0800').add(1, 'day').format()
             const response = await http.get<{ groups: Data1, summary: number }>('/items/summary', {
                 happen_after: props.startDate,
-                happen_before: props.endDate,
+                happen_before: endDate,
                 kind: kind.value,
                 group_by: 'happen_at',
             }, {
@@ -74,7 +75,7 @@ export const Charts = defineComponent({
             data1.value = response.data.groups
         }
         onMounted(fetchData1)
-        watch(() => kind.value, fetchData1)
+        watch(() => [kind.value,props.startDate,props.endDate], fetchData1)
         // data2
         const data2 = ref<Data2>([])
         const betterData2 = computed<{ name: string; value: number }[]>(() =>
@@ -94,9 +95,10 @@ export const Charts = defineComponent({
         })
 
         const fetchData2 = async () => {
+            const endDate = new Time(props.endDate + 'T00:00:00.000+0800').add(1, 'day').format()
             const response = await http.get<{ groups: Data2; summary: number }>('/items/summary', {
                 happen_after: props.startDate,
-                happen_before: props.endDate,
+                happen_before: endDate,
                 kind: kind.value,
                 group_by: 'tag_id'
             }, {
@@ -105,7 +107,7 @@ export const Charts = defineComponent({
             data2.value = response.data.groups
         }
         onMounted(fetchData2)
-        watch(() => kind.value, fetchData2)
+        watch(() => [kind.value, props.startDate, props.endDate], fetchData2)
 
 
         return () => (
