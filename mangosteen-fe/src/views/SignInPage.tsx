@@ -11,6 +11,7 @@ import { history } from '../shared/history';
 import { useRoute, useRouter } from 'vue-router';
 import { refreshMe } from '../shared/me';
 import { BackIcon } from '../shared/BackIcon';
+import { useMeStore } from '../stores/useMeStore';
 export const SignInPage = defineComponent({
     props: {
         name: {
@@ -18,6 +19,7 @@ export const SignInPage = defineComponent({
         }
     },
     setup: (props, context) => {
+        const meStore = useMeStore()
         const formData = reactive({
             email: '757134184@qq.com',
             code: ''
@@ -62,7 +64,8 @@ export const SignInPage = defineComponent({
                 // }, () => {
                 //     window.alert('登录失败')
                 // })
-                refreshMe()
+                // refreshMe()
+                meStore.refreshMe()
                 router.push(returnTo || '/')
             }
         }

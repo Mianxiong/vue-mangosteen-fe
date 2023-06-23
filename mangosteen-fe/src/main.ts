@@ -6,13 +6,24 @@ import { history } from './shared/history';
 import '@svgstore';
 import { http } from './shared/Http';
 import { fetchMe, mePromise } from './shared/me';
+import { createPinia } from 'pinia';
+import { useMeStore } from './stores/useMeStore';
 
 const router = createRouter({
     history,
     routes,
 })
+
+const pinia = createPinia()
+const app = createApp(App)
+app.use(router)
+app.use(pinia)
+app.mount('#app')
+
+const meStore = useMeStore()
+meStore.fetchMe()
 // const promise = http.get('/me')
-fetchMe()
+// fetchMe()
 
 const whiteList: Record<string, 'exact' | 'startsWith'> = {
     '/': 'exact',
@@ -45,13 +56,14 @@ router.beforeEach(async (to, from) => {
         //     return '/sign_in?return_to=' + to.path
         // })
         // return true
-        const path = await mePromise!.then(
+        // const path = await mePromise!.then(
+        const path = await meStore.mePromise!.then(
             () => true, // 成功
             () => '/sign_in?return_to=' + to.path //失败
         )
         return path
     }
 })
-const app = createApp(App)
-app.use(router)
-app.mount('#app')
+
+
+
