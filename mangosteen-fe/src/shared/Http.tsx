@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { mockItemCreate, mockItemIndex, mockItemIndexBalance, mockItemSummary, mockSession, mockTagEdit, mockTagIndex, mockTagShow } from "../mock/mock";
+// import { mockItemCreate, mockItemIndex, mockItemIndexBalance, mockItemSummary, mockSession, mockTagEdit, mockTagIndex, mockTagShow } from "../mock/mock";
 import { Toast } from "vant";
 
 type GetConfig = Omit<AxiosRequestConfig, 'params' | 'url' | 'method'>
@@ -28,49 +28,50 @@ export class Http {
     }
 }
 
-const mock = (response: AxiosResponse) => {
-    if (true || location.hostname !== 'localhost'
-        && location.hostname !== '127.0.0.1'
-        && location.hostname !== '192.168.3.57') { return false }
-    // switch (response.config?.params?._mock) {
-    switch (response.config?._mock) {
-        case 'tagIndex':
-            [response.status, response.data] = mockTagIndex(response.config)
-            console.log('response')
-            console.log(response)
-            return true
-        case 'session':
-            [response.status, response.data] = mockSession(response.config)
-            return true
-        case 'itemCreate':
-            [response.status, response.data] = mockItemCreate(response.config)
-            return true
-        case 'tagShow':
-            [response.status, response.data] = mockTagShow(response.config)
-            return true
-        case 'tagEdit':
-            [response.status, response.data] = mockTagEdit(response.config)
-            return true
-        case 'itemIndex':
-            [response.status, response.data] = mockItemIndex(response.config)
-            return true
-        case 'itemIndexBalance':
-            [response.status, response.data] = mockItemIndexBalance(response.config)
-            return true
-        case 'itemSummary':
-            [response.status, response.data] = mockItemSummary(response.config)
-            return true
-    }
-    return false
-}
+// const mock = (response: AxiosResponse) => {
+//     if (true || location.hostname !== 'localhost'
+//         && location.hostname !== '127.0.0.1'
+//         && location.hostname !== '192.168.3.57') { return false }
+//     // switch (response.config?.params?._mock) {
+//     switch (response.config?._mock) {
+//         case 'tagIndex':
+//             [response.status, response.data] = mockTagIndex(response.config)
+//             console.log('response')
+//             console.log(response)
+//             return true
+//         case 'session':
+//             [response.status, response.data] = mockSession(response.config)
+//             return true
+//         case 'itemCreate':
+//             [response.status, response.data] = mockItemCreate(response.config)
+//             return true
+//         case 'tagShow':
+//             [response.status, response.data] = mockTagShow(response.config)
+//             return true
+//         case 'tagEdit':
+//             [response.status, response.data] = mockTagEdit(response.config)
+//             return true
+//         case 'itemIndex':
+//             [response.status, response.data] = mockItemIndex(response.config)
+//             return true
+//         case 'itemIndexBalance':
+//             [response.status, response.data] = mockItemIndexBalance(response.config)
+//             return true
+//         case 'itemSummary':
+//             [response.status, response.data] = mockItemSummary(response.config)
+//             return true
+//     }
+//     return false
+// }
 
-function isDev() {
-    if (true || location.hostname !== 'localhost'
-        && location.hostname !== '127.0.0.1'
-        && location.hostname !== '192.168.3.57') { return false }
-    return true
-}
-export const http = new Http(isDev() ? 'api/v1' : 'http://121.196.236.94:3000/api/v1')
+// function isDev() {
+//     if (true || location.hostname !== 'localhost'
+//         && location.hostname !== '127.0.0.1'
+//         && location.hostname !== '192.168.3.57') { return false }
+//     return true
+// }
+// export const http = new Http(isDev() ? 'api/v1' : 'http://121.196.236.94:3000/api/v1')
+export const http = new Http(DEBUG ? 'api/v1' : 'http://121.196.236.94:3000/api/v1')
 
 http.instance.interceptors.request.use(config => {
     const jwt = localStorage.getItem('jwt')
@@ -99,26 +100,67 @@ http.instance.interceptors.response.use((response) => {
     throw error
 })
 
-http.instance.interceptors.response.use((response) => {
-    mock(response)
-    if (response.status >= 400) {
-        throw { response: response }
-    } else {
-        return response
-    }
-}, (error) => {
-    mock(error.response)
-    if (error.response.status >= 400) {
-        throw error
-    } else {
-        return error.response
-    }
-    // if (mock(error.response)) {
-    //     return error.response
-    // } else {
-    //     throw error
-    // }
-})
+if(DEBUG) {
+    import('../mock/mock').then(({ mockItemCreate, mockItemIndex, mockItemIndexBalance, mockItemSummary, mockSession, mockTagEdit, mockTagIndex, mockTagShow })=> {
+        const mock = (response: AxiosResponse) => {
+            if (true || location.hostname !== 'localhost'
+                && location.hostname !== '127.0.0.1'
+                && location.hostname !== '192.168.3.57') { return false }
+            // switch (response.config?.params?._mock) {
+            switch (response.config?._mock) {
+                case 'tagIndex':
+                    [response.status, response.data] = mockTagIndex(response.config)
+                    console.log('response')
+                    console.log(response)
+                    return true
+                case 'session':
+                    [response.status, response.data] = mockSession(response.config)
+                    return true
+                case 'itemCreate':
+                    [response.status, response.data] = mockItemCreate(response.config)
+                    return true
+                case 'tagShow':
+                    [response.status, response.data] = mockTagShow(response.config)
+                    return true
+                case 'tagEdit':
+                    [response.status, response.data] = mockTagEdit(response.config)
+                    return true
+                case 'itemIndex':
+                    [response.status, response.data] = mockItemIndex(response.config)
+                    return true
+                case 'itemIndexBalance':
+                    [response.status, response.data] = mockItemIndexBalance(response.config)
+                    return true
+                case 'itemSummary':
+                    [response.status, response.data] = mockItemSummary(response.config)
+                    return true
+            }
+            return false
+        }
+        http.instance.interceptors.response.use((response) => {
+            mock(response)
+            if (response.status >= 400) {
+                throw { response: response }
+            } else {
+                return response
+            }
+        }, (error) => {
+            mock(error.response)
+            if (error.response.status >= 400) {
+                throw error
+            } else {
+                return error.response
+            }
+            // if (mock(error.response)) {
+            //     return error.response
+            // } else {
+            //     throw error
+            // }
+        })
+    })
+    
+}
+
 http.instance.interceptors.response.use(
     response => response,
     error => {
