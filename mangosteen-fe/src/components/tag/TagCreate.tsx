@@ -51,3 +51,5 @@ export const TagCreate = defineComponent({
         )
     }
 })
+
+export default TagCreate

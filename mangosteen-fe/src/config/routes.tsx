@@ -26,7 +26,8 @@ export const routes: RouteRecordRaw[] = [
     // { path: '/about', component: Bar },
     {
         path: '/welcome',
-        component: Welcome,
+        // component: Welcome,
+        component: () => import('../views/Welcome'),
         beforeEnter: (to, from, next) => {
             localStorage.getItem('skipFeatures') === 'yes' ? next('/items') : next()
         },
@@ -40,7 +41,9 @@ export const routes: RouteRecordRaw[] = [
     },
     // { path: '/start', component: StartPage },
     {
-        path: '/items', component: ItemPage,
+        path: '/items',
+        // component: ItemPage,
+        component: () => import('../views/ItemPage'),
         // beforeEnter: async (to, from, next) => {
         //     await http.get('/me').catch(() => {
         //         next('/sign_in?return_to=' + to.path)
@@ -53,20 +56,36 @@ export const routes: RouteRecordRaw[] = [
         ]
     },
     {
-        path: '/tags', component: TagPage,
+        path: '/tags',
+        // component: TagPage,
+        component: () => import('../views/TagPage'),
         children: [
-            { path: 'create', component: TagCreate },
-            { path: ':id/edit', component: TagEdit }
+            {
+                path: 'create',
+                // component: TagCreate
+                component: () => import('../components/tag/TagCreate')
+            },
+            {
+                path: ':id/edit',
+                // component: TagEdit
+                component: () => import('../components/tag/TagEdit')
+            }
         ]
     },
     {
-        path: '/sign_in', component: SignInPage
+        path: '/sign_in',
+        // component: SignInPage
+        component: () => import('../views/SignInPage')
     },
     {
-        path: '/statistics', component: StatisticsPage
+        path: '/statistics',
+        // component: StatisticsPage
+        component: () => import('../views/StatisticsPage')
     },
     {
-        path: '/export', component: ComingSoon
+        path: '/export',
+        // component: ComingSoon
+        component: () => import('../shared/ComingSoon')
     },
     {
         path: '/notify', component: ComingSoon
