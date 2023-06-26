@@ -28,9 +28,10 @@ export const useSwipe = (element: Ref<HTMLElement | undefined>, options?: Option
         const { x, y } = distance.value
         if (Math.abs(x) > Math.abs(y)) {
             return x > 0 ? 'right' : 'left'
-        } else {
-            return y > 0 ? 'down' : 'up'
-        }
+        } 
+        // else {
+        //     return y > 0 ? 'down' : 'up'
+        // }
     })
     const onStart = (e: TouchEvent) => {
         // e.preventDefault()
