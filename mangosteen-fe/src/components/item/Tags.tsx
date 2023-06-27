@@ -70,7 +70,7 @@ export const Tags = defineComponent({
                         <Icon name="add" class={s.createTag} />
                     </div>
                     <div class={s.name}>
-                        新增
+                        新增标签
                     </div>
                 </RouterLink>
                 {tags.value.map(tag =>
