@@ -31,7 +31,7 @@ export const Bars = defineComponent({
                                 </div>
                                 <div class={s.bar_wrapper}>
                                     <div class={s.bar_text}>
-                                        <span>{tag.name} - {percent}%</span>
+                                        <span>{tag.name} &nbsp; {percent}%</span>
                                         <span>￥<Money value={amount} /></span>
                                     </div>
                                     <div class={s.bar}>

@@ -61,7 +61,11 @@
                 color: var(--list-tag-text);
             }
 
-            .amount {
+            .incomeAmount {
+                color: var(--total-income);
+            }
+
+            .expensesAmount {
                 color: var(--list-amount-text);
             }
         }
