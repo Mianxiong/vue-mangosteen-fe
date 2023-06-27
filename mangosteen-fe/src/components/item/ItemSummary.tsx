@@ -53,6 +53,7 @@ export const ItemSummary = defineComponent({
     // onMounted(fetchItems)
     // useAfterMe(fetchItems)
     const itemStore = useItemStore(['items', props.startDate, props.endDate])()
+    itemStore.status = false
     useAfterMe(() => itemStore.fetchItems(props.startDate, props.endDate))
 
     // watch(() => [props.startDate, props.endDate], () => {
@@ -92,7 +93,7 @@ export const ItemSummary = defineComponent({
       })
       fetchItemsBalance()
     })
-    return () => (
+    return () => (itemStore.status ? (
       !props.startDate || !props.endDate ? (<div>请先选择时间范围</div>
       ) : (
         <div class={s.wrapper}>
@@ -125,7 +126,7 @@ export const ItemSummary = defineComponent({
                         {/* <span class={s.tag}>{item.tags_id[0]}</span> */}
                         {/* <span class={s.tag}>{item.tags![0].name}</span> */}
                         <span class={s.tag}>{item.tags && item.tags.length > 0 ? item.tags[0].name : '未分类'}</span>
-                        <span  class={item.kind === 'income'? s.incomeAmount : s.expensesAmount}>￥<Money value={item.amount} /></span>
+                        <span class={item.kind === 'income' ? s.incomeAmount : s.expensesAmount}>￥<Money value={item.amount} /></span>
                       </div>
                       <div class={s.time}><Datetime value={item.happen_at} /></div>
                     </div>
@@ -251,6 +252,7 @@ export const ItemSummary = defineComponent({
             <FloatButton iconName='add' />
           </RouterLink>
         </div>)
-    )
+    ) : (!props.startDate || !props.endDate ? (<div>请先选择时间范围</div>
+      ) : <div></div>))
   }
 })

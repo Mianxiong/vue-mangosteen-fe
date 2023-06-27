@@ -5,7 +5,8 @@ import { Time } from "../shared/time";
 type State = {
     items: Item[]
     hasMore: boolean
-    page: number
+    page: number,
+    status: boolean
 }
 type Actions = {
     // reset: () => void
@@ -19,7 +20,8 @@ export const useItemStore = (id: string | (string | undefined)[]) =>
         state: () => ({
             items: [],
             hasMore: false,
-            page: 0
+            page: 0,
+            status: false
         }),
         actions: {
             // reset() {
@@ -50,6 +52,7 @@ export const useItemStore = (id: string | (string | undefined)[]) =>
                 }
                 this.hasMore = (pager.page - 1) * pager.per_page + resources.length < pager.count
                 this.page += 1
+                this.status = true
             },
             async fetchNextPage(startDate, endDate) {
                 this._fetch(false, startDate, endDate)
