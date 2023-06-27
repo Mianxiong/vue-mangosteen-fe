@@ -40,12 +40,11 @@ export const Charts = defineComponent({
             const diff = new Date(props.endDate).getTime() - new Date(props.startDate).getTime()
             const n = diff / DAY + 1
             let data1Index = data1.value.length - 1
-            for(let i = 0; i<n; i++) {
-                const time = new Time(props.startDate+'T00:00:00.000+0800').add(i,'day').getTimestamp()
+            for (let i = 0; i < n; i++) {
+                const time = new Time(props.startDate + 'T00:00:00.000+0800').add(i, 'day').getTimestamp()
                 if (data1.value[data1Index] && new Date(data1.value[data1Index].happen_at + 'T00:00:00.000+0800').getTime() === time) {
-                    array.push([new Date(time).toISOString(),data1.value[data1Index].amount])
+                    array.push([new Date(time).toISOString(), data1.value[data1Index].amount])
                     data1Index -= 1
-                    console.log('data1Index',data1Index)
                 } else {
                     array.push([new Date(time).toISOString(), 0])
                 }
@@ -76,7 +75,7 @@ export const Charts = defineComponent({
             data1.value = response.data.groups
         }
         onMounted(fetchData1)
-        watch(() => [kind.value,props.startDate,props.endDate], fetchData1)
+        watch(() => [kind.value, props.startDate, props.endDate], fetchData1)
         // data2
         const data2 = ref<Data2>([])
         const betterData2 = computed<{ name: string; value: number }[]>(() =>
@@ -96,6 +95,9 @@ export const Charts = defineComponent({
         })
 
         const fetchData2 = async () => {
+            if (props.startDate === undefined || props.endDate === undefined) {
+                return
+            }
             const endDate = new Time(props.endDate + 'T00:00:00.000+0800').add(1, 'day').format()
             const response = await http.get<{ groups: Data2; summary: number }>('/items/summary', {
                 happen_after: props.startDate,
@@ -117,9 +119,11 @@ export const Charts = defineComponent({
                     { value: 'expenses', text: '支出' },
                     { value: 'income', text: '收入' }
                 ]} v-model={kind.value} />
-                <LineChart data={betterData1.value} />
-                <PieChart data={betterData2.value} />
-                <Bars data={betterData3.value} />
+                {!props.startDate || !props.endDate ? (<div>请先选择时间范围</div>
+                ) : <div><LineChart data={betterData1.value} />
+                    <PieChart data={betterData2.value} />
+                    <Bars data={betterData3.value} /></div>}
+
             </div>
         )
     }
