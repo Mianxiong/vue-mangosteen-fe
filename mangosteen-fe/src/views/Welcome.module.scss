@@ -44,18 +44,24 @@
 }
 
 
-.slide_fade_left_enter_from {
+//.slide_fade_left_enter_from {
+//    transform: translateX(100vw);
+//}
+//
+//.slide_fade_left_leave_to {
+//    transform: translateX(-100vw);
+//}
+//
+//.slide_fade_right_enter_from {
+//    transform: translateX(-100vw);
+//}
+//
+//.slide_fade_right_leave_to {
+//    transform: translateX(100vw);
+//}
+.slide_fade_enter_from {
     transform: translateX(100vw);
 }
-
-.slide_fade_left_leave_to {
+.slide_fade_leave_to {
     transform: translateX(-100vw);
-}
-
-.slide_fade_right_enter_from {
-    transform: translateX(-100vw);
-}
-
-.slide_fade_right_leave_to {
-    transform: translateX(100vw);
 }

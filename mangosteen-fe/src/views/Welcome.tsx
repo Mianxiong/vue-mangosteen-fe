@@ -69,7 +69,14 @@ export const Welcome = defineComponent({
                 <RouterView name="main">
                     {/* {(obj: any) => <Transition name="slide-fade"><obj.Component /></Transition>} */}
                     {({ Component: Content, route: R }: { Component: VNode, route: RouteLocationNormalizedLoaded }) =>
-                        <Transition enterFromClass={direction.value === 'left' ? s.slide_fade_left_enter_from : s.slide_fade_right_enter_from} enterActiveClass={s.slide_fade_enter_active} leaveToClass={direction.value === 'left' ? s.slide_fade_left_leave_to : s.slide_fade_right_leave_to} leaveActiveClass={s.slide_fade_leave_active}>
+                        // <Transition enterFromClass={direction.value === 'left' ? s.slide_fade_left_enter_from : s.slide_fade_right_enter_from} enterActiveClass={s.slide_fade_enter_active} leaveToClass={direction.value === 'left' ? s.slide_fade_left_leave_to : s.slide_fade_right_leave_to} leaveActiveClass={s.slide_fade_leave_active}>
+                        //     {Content}
+                        // </Transition>
+                        <Transition
+                            enterFromClass={s.slide_fade_enter_from}
+                            enterActiveClass={s.slide_fade_enter_active}
+                            leaveToClass={s.slide_fade_leave_to}
+                            leaveActiveClass={s.slide_fade_leave_active}>
                             {Content}
                         </Transition>
                     }
