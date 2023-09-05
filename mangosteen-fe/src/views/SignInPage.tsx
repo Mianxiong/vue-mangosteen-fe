@@ -21,8 +21,8 @@ export const SignInPage = defineComponent({
     setup: (props, context) => {
         const meStore = useMeStore()
         const formData = reactive({
-            email: '757134184@qq.com',
-            code: ''
+            email: 'frankxiong202307@163.com',
+            code: '123456'
         })
         const errors = reactive({
             email: [],
